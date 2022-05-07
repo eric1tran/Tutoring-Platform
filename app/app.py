@@ -1,6 +1,9 @@
 from dotenv import load_dotenv
 from flask import Flask, render_template, request
+import mysql.connector
 import os, sys
+
+from database import MySqlDBConnection
 
 app = Flask(__name__)
 
@@ -31,6 +34,19 @@ def signup():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
+
+        with MySqlDBConnection(os.getenv('DB_HOST'), os.getenv('DB_USER'), os.getenv('DB_PASSWORD'), "tutoring_db") as db:
+            cursor = db.session.cursor()
+            query = ("SELECT * FROM users")
+
+            cursor.execute(query)
+
+            for result in cursor:
+                print(result)
+
+        # Check if email exists
+        # If yes, return response saying There is an account under this email. Log in
+        # If no, add an entry into users table and then respond saying account created
 
     return render_template('signup.html')
 
