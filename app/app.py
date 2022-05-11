@@ -32,14 +32,16 @@ def signup():
 
     # POST - Calls backend servers to validate user information and create an account
     if request.method == 'POST':
+        first = request.form['firstname']
+        last = request.form['lastname']
         email = request.form['email']
         password = request.form['password']
-        if email == "" or password == "":
+        if email == "" or password == "" or first == "" or last == "":
             print(f'Missing input')
             # RETURN MISSING INPUT RESPONSE
             return render_template("signup.html")
 
-        # Validate email address, return invalid email response if bad
+        # Do server side email address validation as well, return invalid email response if bad
 
         with MySqlDBConnection(os.getenv('DB_HOST'), os.getenv('DB_USER'), os.getenv('DB_PASSWORD'), "tutoring_db") as db:
             cursor = db.session.cursor()
@@ -54,7 +56,7 @@ def signup():
             else:
                 print(f'Creating account!')
                 query = ("INSERT INTO users (first, last, email, user_type) VALUES (%s, %s, %s, %s)")
-                cursor.execute(query, ('dummy', 'dummy', email, 'admin'))
+                cursor.execute(query, (first, last, email, 'admin'))
                 db.session.commit()
 
                 # RETURN ACCOUNT CREATED RESPONSE

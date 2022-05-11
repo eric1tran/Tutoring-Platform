@@ -1,9 +1,13 @@
 <h1>Sign Up</h1>
 <form method="POST">
+    <label>First Name:</label><br>
+    <input type="text" id="firstname" name="firstname" required><br>
+    <label>Last Name:</label><br>
+    <input type="text" id="lastname" name="lastname" required><br>
     <label>Email:</label><br>
-    <input type="text" id="email" name="email"><br>
+    <input type="email" id="email" name="email" required><br>
     <label>Password:</label><br>
-    <input type="password" id="password" name="password"><br>
+    <input type="password" id="password" name="password" required minlength="8" maxlength="128"><br>
     <input type="submit" value="Submit">
 </form>
 <a href="/">Login</a>
