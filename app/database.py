@@ -1,5 +1,5 @@
 from mysql.connector import connect
-
+import hashlib
 
 class MySqlDBConnection(object):
     def __init__(self, host, user, password, database):
@@ -19,3 +19,10 @@ class MySqlDBConnection(object):
 
     def __exit__(self, exc_type, exc_value, traceback):
         self.session.close()
+
+
+def hash_password(password):
+    if not password or not isinstance(password, str):
+        return None
+
+    return hashlib.sha256(password.encode('utf-8')).hexdigest()

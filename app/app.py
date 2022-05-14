@@ -3,7 +3,7 @@ from flask import Flask, render_template, request
 import mysql.connector
 import os, sys
 
-from database import MySqlDBConnection
+from database import MySqlDBConnection, hash_password
 
 app = Flask(__name__)
 
@@ -72,9 +72,13 @@ def signup():
                 print(f'Account already exists!')
                 # RETURN ACCOUNT EXISTS RESPONSE
             else:
+                password_hash = hash_password(password)
+                if not password_hash:
+                    print(f'Invalid password format')
+
                 print(f'Creating account for {first} {last} using email {email}!')
                 query = ("INSERT INTO users (first, last, email, user_type, password) VALUES (%s, %s, %s, %s, %s)")
-                cursor.execute(query, (first, last, email, 'admin', password))
+                cursor.execute(query, (first, last, email, 'admin', password_hash))
                 db.session.commit()
 
                 # RETURN ACCOUNT CREATED RESPONSE
