@@ -30,16 +30,22 @@ def index():
 
         # Check if account exists
         with MySqlDBConnection(os.getenv('DB_HOST'), os.getenv('DB_USER'), os.getenv('DB_PASSWORD'), "tutoring_db") as db:
-            cursor = db.session.cursor()
+            cursor = db.session.cursor(dictionary=True)
 
-            query = ("SELECT * FROM users where email = %s")
+            query = ("SELECT first, last, email, password FROM users where email = %s")
             cursor.execute(query, (email,))
             data = cursor.fetchall()
-            if data:
-                print(f'Account {email} already exists')
+            if not data:
+                print(f'Account {email} does not exist.')
             else:
-                pass
-                # Validate password
+                db_result = data[0]
+                password_db = db_result['password']
+                password_input = hash_password(password)
+
+                if password_db != password_input:
+                    print(f'Invalid password!!!')
+                else:
+                    print(f'{email} login authenticated')
 
     return render_template('login.html')
 
