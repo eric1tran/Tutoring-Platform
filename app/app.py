@@ -14,6 +14,7 @@ if not os.getenv("DATABASE_URL"):
     sys.exit(1)
 
 
+# Login page
 @app.route('/', methods=['GET','POST'])
 def index():
     # GET - Display user home page if logged in, otherwise the login page
@@ -22,6 +23,23 @@ def index():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
+
+        if email == "" or password == "":
+            print(f'Missing input')
+            return render_template("signup.html")
+
+        # Check if account exists
+        with MySqlDBConnection(os.getenv('DB_HOST'), os.getenv('DB_USER'), os.getenv('DB_PASSWORD'), "tutoring_db") as db:
+            cursor = db.session.cursor()
+
+            query = ("SELECT * FROM users where email = %s")
+            cursor.execute(query, (email,))
+            data = cursor.fetchall()
+            if data:
+                print(f'Account {email} already exists')
+            else:
+                pass
+                # Validate password
 
     return render_template('login.html')
 
@@ -50,13 +68,13 @@ def signup():
             query = ("SELECT * FROM users where email = %s")
             cursor.execute(query, (email,))
             data = cursor.fetchall()
-            if len(data):
-                print(f'Account exists!')
+            if data:
+                print(f'Account already exists!')
                 # RETURN ACCOUNT EXISTS RESPONSE
             else:
-                print(f'Creating account!')
-                query = ("INSERT INTO users (first, last, email, user_type) VALUES (%s, %s, %s, %s)")
-                cursor.execute(query, (first, last, email, 'admin'))
+                print(f'Creating account for {first} {last} using email {email}!')
+                query = ("INSERT INTO users (first, last, email, user_type, password) VALUES (%s, %s, %s, %s, %s)")
+                cursor.execute(query, (first, last, email, 'admin', password))
                 db.session.commit()
 
                 # RETURN ACCOUNT CREATED RESPONSE
