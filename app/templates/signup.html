@@ -10,4 +10,7 @@
     <input type="password" id="password" name="password" required minlength="8" maxlength="128"><br>
     <input type="submit" value="Submit">
 </form>
+{% if error %}
+    <p>{{ error }}</p>
+{% endif %}
 <a href="/">Login</a>

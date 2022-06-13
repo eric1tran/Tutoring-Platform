@@ -19,6 +19,7 @@ if not os.getenv("DATABASE_URL"):
 def index():
     # GET - Display user home page if logged in, otherwise the login page
 
+    error = None
     # POST - Validate login information and login and forward to user home page
     if request.method == 'POST':
         email = request.form['email']
@@ -37,23 +38,26 @@ def index():
             data = cursor.fetchall()
             if not data:
                 print(f'Account {email} does not exist.')
+                error = "Account does not exist!"
             else:
                 db_result = data[0]
                 password_db = db_result['password']
                 password_input = hash_password(password)
 
                 if password_db != password_input:
-                    print(f'Invalid password!!!')
+                    error = "Invalid Password!"
                 else:
-                    print(f'{email} login authenticated')
+                    fullname = f'{db_result["first"]} {db_result["last"]}'
+                    return render_template('home.html', name=fullname)
 
-    return render_template('login.html')
+    return render_template('login.html', error=error)
 
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     # GET - Returns HTML forms to get user information
 
+    error = None
     # POST - Calls backend servers to validate user information and create an account
     if request.method == 'POST':
         first = request.form['firstname']
@@ -75,8 +79,8 @@ def signup():
             cursor.execute(query, (email,))
             data = cursor.fetchall()
             if data:
-                print(f'Account already exists!')
-                # RETURN ACCOUNT EXISTS RESPONSE
+                print(f'An account with that email already exists')
+                error = f'An account with that email already exists'
             else:
                 password_hash = hash_password(password)
                 if not password_hash:
@@ -87,9 +91,14 @@ def signup():
                 cursor.execute(query, (first, last, email, 'admin', password_hash))
                 db.session.commit()
 
-                # RETURN ACCOUNT CREATED RESPONSE
+                return render_template('home.html', name=f'{first} {last}')
 
-    return render_template('signup.html')
+    return render_template('signup.html', error=error)
+
+@app.route('/home/<name>')
+def home(name):
+    return render_template('signup.html', name=name)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
