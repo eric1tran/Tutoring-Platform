@@ -50,7 +50,7 @@ def index():
                     fullname = f'{db_result["first"]} {db_result["last"]}'
                     return render_template('home.html', name=fullname)
 
-    return render_template('login.html', error=error)
+    return render_template('index.html', error=error)
 
 
 @app.route('/signup', methods=['GET', 'POST'])
