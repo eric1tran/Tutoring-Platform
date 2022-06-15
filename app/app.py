@@ -53,7 +53,7 @@ def index():
     return render_template('index.html', error=error)
 
 
-@app.route('/signup', methods=['GET', 'POST'])
+@app.route('/signup/', methods=['GET', 'POST'])
 def signup():
     # GET - Returns HTML forms to get user information
 

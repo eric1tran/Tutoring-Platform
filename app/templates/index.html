@@ -9,10 +9,9 @@
 
     <body>
         <div class="login">
-            <h1>Log In</h1>
             <div class="links">
                 <a href=" {{ url_for('index') }}" class="active">Log In</a>
-                <a href="#">Sign Up</a> 
+                <a href=" {{ url_for ('signup') }}">Sign Up</a>
             </div>
             <form action="{{ url_for('index') }}" method="post">
                 <label for="email">

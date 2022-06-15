@@ -3,52 +3,54 @@ body {
     margin: 0;
 }
 
-.login, .register {
+.login, .signup {
     width: 400px;
     background-color: #ffffff;
     box-shadow: 0 0 9px 0 rgba(0,0,0,0.3);
     margin: 100px auto;
 }
 
-.login h1, .register h1 {
+.login h1, .signup h1 {
     text-align: center;
     color: #ffffff;
     background-color:#32d697;
     font-size: 24px;
-    padding: 20px 0 20 px 0;
+    padding: 5px;
+    margin-top: 20px;
     border-bottom: 1px solid #dee0e4;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
-.login .links .register .links {
+.login .links .signup .links {
     display: flex;
     padding: 0 15px;
 }
 
-.login .links a, .register .links a {
+.login .links a, .signup .links a {
     color: #adb2ba;
     text-decoration: none;
     display: inline-flex;
-    padding: 0 10px 10px 10px;
+    padding: 10px 10px 10px 10px;
     font-weight: bold;
 }
 
-.login .links a:hover, .register .links a:hover {
+.login .links a:hover, .signup .links a:hover {
     color: #9da3ac;
 }
 
-.login .links a.active, .register .links a.active {
+.login .links a.active, .signup .links a.active {
     border-bottom: 3px solid #32d697;
     color: #2868c7;
 }
 
-.login form, .register form {
+.login form, .signup form {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     padding-top: 20px;
 }
 
-.login form label, .register form label {
+.login form label, .signup form label {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -58,7 +60,7 @@ body {
     color: #ffffff;
 }
 
-.login form input[type="password"], .login form input[type="text"], .login form input[type="email"], .register form input[type="password"], .register form input[type="text"], .register form input[type="email"] {
+.login form input[type="password"], .login form input[type="text"], .login form input[type="email"], .signup form input[type="password"], .signup form input[type="text"], .signup form input[type="email"], .signup form input[type="firstname"], .signup form input[type="lastname"]{
     width: 310px;
     height: 50px;
     border: 1px solid #dee0e4;
@@ -66,19 +68,19 @@ body {
     padding: 0 15px;
 }
 
-.login form input[type="submit"], .register form input[type="submit"]{
+.login form input[type="submit"], .signup form input[type="submit"]{
     width: 100%;
     padding: 15px;
-    margin-top: 20px;
     background-color: #32d697;
     border: 0;
     cursor: pointer;
     font-weight: bold;
     color: #ffffff;
     transition: background-color 0.2s;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
 }
 
-.login form input[type="submit"]:hover, .register form input[type="submit"]:hover {
+.login form input[type="submit"]:hover, .signup form input[type="submit"]:hover {
     background-color: #2868c7;
     transition: background-color 0.2s;
 }
@@ -158,4 +160,9 @@ body.loggedin {
 .content > div p {
     padding: 5px;
     margin: 0 0 10px 0;
+}
+
+.error {
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    color: red;
 }
