@@ -1,6 +1,5 @@
 from dotenv import load_dotenv
 from flask import Flask, render_template, request
-import mysql.connector
 import os, sys
 
 from database import MySqlDBConnection, hash_password
@@ -14,22 +13,21 @@ if not os.getenv("DATABASE_URL"):
     sys.exit(1)
 
 
-# Login page
+# Log In endpoint
 @app.route('/', methods=['GET','POST'])
 def index():
-    # GET - Display user home page if logged in, otherwise the login page
 
     error = None
-    # POST - Validate login information and login and forward to user home page
+
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
 
         if email == "" or password == "":
-            print(f'Missing input')
-            return render_template("signup.html")
+            error = "Missing input field(s)"
+            return render_template("index.html", error=error)
 
-        # Check if account exists
+        # Validate credentials
         with MySqlDBConnection(os.getenv('DB_HOST'), os.getenv('DB_USER'), os.getenv('DB_PASSWORD'), "tutoring_db") as db:
             cursor = db.session.cursor(dictionary=True)
 
@@ -38,7 +36,7 @@ def index():
             data = cursor.fetchall()
             if not data:
                 print(f'Account {email} does not exist.')
-                error = "Account does not exist!"
+                error = "Account/password combination do not exist"
             else:
                 db_result = data[0]
                 password_db = db_result['password']
@@ -52,24 +50,22 @@ def index():
 
     return render_template('index.html', error=error)
 
-
+# Sign Up endpoint
 @app.route('/signup/', methods=['GET', 'POST'])
 def signup():
-    # GET - Returns HTML forms to get user information
 
     error = None
-    # POST - Calls backend servers to validate user information and create an account
+
     if request.method == 'POST':
         first = request.form['firstname']
         last = request.form['lastname']
         email = request.form['email']
         password = request.form['password']
         if email == "" or password == "" or first == "" or last == "":
-            print(f'Missing input')
-            # RETURN MISSING INPUT RESPONSE
-            return render_template("signup.html")
+            error = "Missing input field(s)"
+            return render_template("signup.html", error=error)
 
-        # Do server side email address validation as well, return invalid email response if bad
+        # TODO: server side email address validation
 
         with MySqlDBConnection(os.getenv('DB_HOST'), os.getenv('DB_USER'), os.getenv('DB_PASSWORD'), "tutoring_db") as db:
             cursor = db.session.cursor()
@@ -84,9 +80,10 @@ def signup():
             else:
                 password_hash = hash_password(password)
                 if not password_hash:
-                    print(f'Invalid password format')
+                    error = f'Invalid password format'
+                    return render_template('signup.html', error=error)
 
-                print(f'Creating account for {first} {last} using email {email}!')
+                print(f'Creating account for {first} {last} with email {email}')
                 query = ("INSERT INTO users (first, last, email, user_type, password) VALUES (%s, %s, %s, %s, %s)")
                 cursor.execute(query, (first, last, email, 'admin', password_hash))
                 db.session.commit()
@@ -94,10 +91,6 @@ def signup():
                 return render_template('home.html', name=f'{first} {last}')
 
     return render_template('signup.html', error=error)
-
-@app.route('/home/<name>')
-def home(name):
-    return render_template('signup.html', name=name)
 
 
 if __name__ == '__main__':
