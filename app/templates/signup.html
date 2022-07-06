@@ -8,11 +8,13 @@
     </head>
 
     <body>
+        <!-- signup div class encompasses the entire box -->
         <div class="signup">
             <div class="links">
-                <a href=" {{ url_for ('index') }}">Log In</a>
+                <a href=" {{ url_for ('login') }}">Log In</a>
                 <a href=" {{ url_for ('signup') }}" class="active">Sign Up</a>
             </div>
+            <!-- action attribute: On submit, send the form data to the url for signup.html -->
             <form action=" {{ url_for('signup') }}" method="post">
                 <label for="firstname">
                     <i class="fas fa-user"></i>
@@ -21,7 +23,7 @@
                 <label for="lastname">
                     <i class="fas fa-user"></i>
                 </label>
-                <input type="lastname" name="lastname" placeholder="Last Name" id="lastname" required>                
+                <input type="lastname" name="lastname" placeholder="Last Name" id="lastname" required>
                 <label for="email">
                     <i class="fas fa-user"></i>
                 </label>
@@ -33,7 +35,8 @@
                 {% if error %}
                 <div class="error"> {{ error }}</div>
                 {% endif %}
-                <input type="submit" class="submit" value="Sign Up">
+                <p></p>
+                <input type="submit" value="Sign Up">
             </form>
         </div>
     </body>

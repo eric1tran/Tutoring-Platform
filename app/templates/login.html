@@ -3,17 +3,17 @@
     <head>
         <meta charset="utf-8">
         <title>Login</title>
-        <link rel="stylesheet" href="{{ url_for ('static', filename='style.css') }}">
+        <link rel="stylesheet" href="{{ url_for ('static', filename='css/style.css') }}">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
     </head>
 
     <body>
         <div class="login">
             <div class="links">
-                <a href=" {{ url_for('index') }}" class="active">Log In</a>
+                <a href=" {{ url_for('login') }}" class="active">Log In</a>
                 <a href=" {{ url_for ('signup') }}">Sign Up</a>
             </div>
-            <form action="{{ url_for('index') }}" method="post">
+            <form action="{{ url_for('login') }}" method="post">
                 <label for="email">
                     <i class="fas fa-user"></i>
                 </label>
@@ -25,6 +25,7 @@
                 {% if error %}
                 <div class="error"> {{ error }}</div>
                 {% endif %}
+                <br><br>
                 <input type="submit" value="Login">
             </form>
         </div>
